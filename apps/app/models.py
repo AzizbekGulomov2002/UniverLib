@@ -34,6 +34,7 @@ class Trade(models.Model):
     start = models.DateField()
     desc = models.TextField(null=True, blank=True)
     next_pay = models.DateField()
+    
     # class TradeQuerySet(models.QuerySet):
     #     def annotate_common_payment(self):
     #         return self.annotate(
@@ -76,33 +77,9 @@ class Trade(models.Model):
             if days_overdue > 0:
                 return f"Qarzdorlik"
             else:
-                return f"Qarzdorlik {self.monthly_pay*100} / {self.debt_balance}"  
+                return "Qarzdorlik"
         else:
             return "To'langan"
-        
-        
-    # def debt_profit(self):
-    #     today = timezone.localdate()
-    #     # yigindi = sum(self.monthly_pay * 100) / sum(self.total - self.common_payment)
-    #     if self.debt_balance > 0 and self.next_pay < today:
-    #         return f"{(self.monthly_pay* 100) / (self.total-self.common_payment)}  %"
-    #         # return yigindi
-    # @property
-    # def debt_profit(self):
-    #     today = timezone.localdate()
-    #     if self.debt_balance > 0 and self.next_pay < today:
-    #         total_monthly_pay = sum(trade.monthly_pay for trade in Trade.objects.all())
-    #         total_debt_balance = sum(trade.debt_balance for trade in Trade.objects.all())
-    #         if total_debt_balance > 0:
-    #             return total_monthly_pay * 100 / total_debt_balance
-    #     return None
-    
-        
-    # def calculate_price(self):
-    #     days_passed = (timezone.now().date() - self.next_pay).days
-    #     multiplier = (days_passed // 30) + 1
-    #     calculated_price = self.monthly_pay * multiplier
-    #     return calculated_price
     
     def calculate_dollar(self):
         days_passed = (timezone.now().date() - self.next_pay).days
@@ -118,7 +95,7 @@ class Trade(models.Model):
         if self.type_pay == "So'm":
             multiplier = (days_passed // 30) + 1
             calculated_price = self.monthly_pay * multiplier
-            return f"$ {calculated_price} so'm"
+            return f" {calculated_price} so'm"
         else:
             return None
     
